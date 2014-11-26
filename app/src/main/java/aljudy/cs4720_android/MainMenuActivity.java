@@ -48,6 +48,14 @@ public class MainMenuActivity extends Activity {
             }
         });
 
+        Button instructionsButton = (Button) findViewById(R.id.instructionsButton);
+        instructionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startInstructions();
+            }
+        });
+
     }
 
     void startMain() {
@@ -70,6 +78,10 @@ public class MainMenuActivity extends Activity {
         startActivity(i);
     }
 
+    void startInstructions() {
+        Intent i = new Intent(getApplicationContext(), InstructionsActivity.class);
+        startActivity(i);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

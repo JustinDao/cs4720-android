@@ -59,4 +59,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:text="Instructions"
+        android:id="@+id/instructionsButton"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

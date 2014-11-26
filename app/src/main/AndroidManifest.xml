@@ -35,8 +35,13 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".TwitterActivity"
+            android:name="aljudy.cs4720_android.TwitterActivity"
             android:label="@string/title_activity_twitter" >
+        </activity>
+        <activity
+            android:name="aljudy.cs4720_android.InstructionsActivity"
+            android:label="@string/title_activity_instructions"
+            android:screenOrientation="landscape" >
         </activity>
     </application>
 
