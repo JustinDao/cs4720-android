@@ -3,15 +3,24 @@ package edu.virginia.cs.tugowar.game;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 
 /**
  * Created by Justin on 11/23/2014.
  */
 public class GameplayView extends View {
 
-    static final int WIN_SCORE_DIFFERENCE = 20;
+    static final int WIN_SCORE_DIFFERENCE = 16;
     static final double ONE_BILLION_LOL = 1000000000.0;
     static final int MAX_PLAYER_BUBBLES = 5;
     static final double MAX_DELTA = 1.0/30;
@@ -21,6 +30,9 @@ public class GameplayView extends View {
     float inchf;
 
     private boolean initialized = false;
+    private boolean gameOver = false;
+    private String winner = "";
+    private int oldScoreDifference = 32;
 
     final Paint paint = new Paint();
     final EntitySet bubbles = new EntitySet();
@@ -78,23 +90,53 @@ public class GameplayView extends View {
     }
 
     private void gameUpdate(double delta) {
-        if(Math.abs(players[0].score - players[1].score) >= WIN_SCORE_DIFFERENCE)
+        if(gameOver)
         {
             // Intent
             // startActivity
             // return
         }
 
-        spawnTimer += delta;
-        if (spawnTimer >= BUBBLE_INTERVAL) {
-            makeBubbles();
-            spawnTimer -= BUBBLE_INTERVAL;
-        }
-        bubbles.update(delta);
-        for (Player p : players) {
-            while (p.bonusBubbles > 0) {
-                p.bonusBubbles--;
-                this.makeOneBubble(p);
+        if (!gameOver)
+        {
+
+            int scoreDifference = players[0].score - players[1].score;
+
+            if (oldScoreDifference != scoreDifference)
+            {
+                oldScoreDifference = scoreDifference;
+                new LightJSON().execute();
+            }
+
+            if (scoreDifference > WIN_SCORE_DIFFERENCE)
+            {
+                // Blue Wins
+                Log.d("winner", "Blue Wins!");
+                gameOver = true;
+                winner = "Blue";
+                bubbles.clear();
+
+            }
+            else if (scoreDifference < -WIN_SCORE_DIFFERENCE)
+            {
+                // Green Wins
+                Log.d("winner", "Green Wins!");
+                gameOver = true;
+                winner = "Green";
+                bubbles.clear();
+            }
+
+            spawnTimer += delta;
+            if (spawnTimer >= BUBBLE_INTERVAL) {
+                makeBubbles();
+                spawnTimer -= BUBBLE_INTERVAL;
+            }
+            bubbles.update(delta);
+            for (Player p : players) {
+                while (p.bonusBubbles > 0) {
+                    p.bonusBubbles--;
+                    this.makeOneBubble(p);
+                }
             }
         }
     }
@@ -104,28 +146,152 @@ public class GameplayView extends View {
         if (!initialized) {
             init();
         }
+
         long time = System.nanoTime();
         double delta = (time - lastTime) / ONE_BILLION_LOL;
         delta = Math.min(delta, MAX_DELTA);
         lastTime = time;
         gameUpdate(delta);
         gameDraw(canvas);
+
+
         invalidate();
         super.onDraw(canvas);
     }
 
     protected void gameDraw(Canvas canvas) {
+        if(!gameOver)
+        {
+            bubbles.render(canvas, paint);
+        }
 
-        bubbles.render(canvas, paint);
         hud.render(canvas, paint);
         invalidate();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        bubbles.touchEvent(event);
+        if (!gameOver)
+        {
+            bubbles.touchEvent(event);
+        }
 
         return false;
+    }
+
+    // Light Code
+
+    class LightJSON extends AsyncTask<String, Void, Integer> {
+        protected Integer doInBackground(String... params) {
+            try {
+                int scoreDifference = players[0].score - players[1].score;
+                applyColors(scoreDifference);
+            } catch (Exception e) {
+                Log.e("error", "Fail", e);
+            }
+
+            return 0;
+        }
+    }
+
+    String getIP() {
+        // TODO: Put IP in settings
+        return "10.98.123.119";
+    }
+
+    String getLightJSON(int scoreDifference) {
+
+        String json = "";
+
+        if (scoreDifference == 0)
+        {
+            json = "{'lights': [{'lightId':1,'red':0,'green':0,'blue':0,'intensity': 0}], 'propagate': true}";
+        }
+        else if (scoreDifference > 0)
+        {
+            // Blue is Winning
+            json = "{'lights': [";
+
+            for(int i = 31; i > 15; i--)
+            {
+                json += "{'lightId':" + i + ",'red':0,'green':0,'blue':0,'intensity': 0.5},";
+            }
+
+            for (int i = 15; i > 15-scoreDifference; i--) {
+                if (i < 0)
+                {
+                    break;
+                }
+
+                json += "{'lightId':" + i + ",'red':0,'green':0,'blue':255,'intensity': 0.5}";
+
+                if ( (i - 1) > 15-scoreDifference)
+                {
+                    json += ",";
+                }
+            }
+
+            for(int i = 15-scoreDifference; i >= 0; i--)
+            {
+                json += ",{'lightId':" + i + ",'red':0,'green':0,'blue':0,'intensity': 0.5}";
+            }
+
+            json += "], 'propagate': false}";
+        }
+        else if (scoreDifference < 0)
+        {
+            scoreDifference = scoreDifference * -1;
+            // Green is Winning
+            json = "{'lights': [";
+
+            for(int i = 0; i < 16; i++)
+            {
+                json += "{'lightId':" + i + ",'red':0,'green':0,'blue':0,'intensity': 0.5},";
+            }
+
+            for (int i = 16; i < 16+scoreDifference; i++) {
+                if (i > 31)
+                {
+                    break;
+                }
+
+                json += "{'lightId':" + i + ",'red':0,'green':255,'blue':0,'intensity': 0.5}";
+
+                if ( (i + 1) < 16+scoreDifference)
+                {
+                    json += ",";
+                }
+            }
+
+            for(int i = 16+scoreDifference; i < 32; i++)
+            {
+                json += ",{'lightId':" + i + ",'red':0,'green':0,'blue':0,'intensity': 0.5}";
+            }
+
+            json += "], 'propagate': false}";
+        }
+
+        return json.replace("'", "\"");
+    }
+
+    void applyColors(int scoreDifference) {
+        String msg = "Successfully updated lights!";
+        try {
+            String json = getLightJSON(scoreDifference);
+            Log.d("json", json);
+            HttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost("http://" + getIP() + "/rpi");
+            StringEntity wtf = new StringEntity(json);
+            wtf.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "text/json"));
+            post.setEntity(wtf);
+            post.setHeader("Content-Type", "text/json");
+            client.execute(post);
+
+        } catch (Exception e) {
+            msg = "Could not update lights :-(";
+            Log.e("error", msg, e);
+
+        }
     }
 
 }
