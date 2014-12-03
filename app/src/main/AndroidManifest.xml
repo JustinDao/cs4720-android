@@ -43,6 +43,10 @@
             android:label="@string/title_activity_instructions"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name="aljudy.cs4720_android.WinActivity"
+            android:label="@string/title_activity_win" >
+        </activity>
     </application>
 
 </manifest>

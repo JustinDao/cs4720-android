@@ -1,6 +1,8 @@
 package edu.virginia.cs.tugowar.game;
 
 import android.content.Context;
+import android.content.Intent;
+import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.AsyncTask;
@@ -14,6 +16,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
+
+import aljudy.cs4720_android.WinActivity;
 
 /**
  * Created by Justin on 11/23/2014.
@@ -32,11 +36,14 @@ public class GameplayView extends View {
     private boolean initialized = false;
     private boolean gameOver = false;
     private String winner = "";
+    private int winColor = 0xFFFFFFFF;
     private int oldScoreDifference = 32;
 
     final Paint paint = new Paint();
     final EntitySet bubbles = new EntitySet();
     final EntitySet hud = new EntitySet();
+
+    private Text winnerText;
 
     // ok ok this is kind of ugly. w/e
     Player[] players = new Player[] {
@@ -90,13 +97,6 @@ public class GameplayView extends View {
     }
 
     private void gameUpdate(double delta) {
-        if(gameOver)
-        {
-            // Intent
-            // startActivity
-            // return
-        }
-
         if (!gameOver)
         {
 
@@ -113,17 +113,20 @@ public class GameplayView extends View {
                 // Blue Wins
                 Log.d("winner", "Blue Wins!");
                 gameOver = true;
-                winner = "Blue";
+                winner = "Blue Wins!";
+                winColor = players[0].color;
                 bubbles.clear();
-
+                return;
             }
             else if (scoreDifference < -WIN_SCORE_DIFFERENCE)
             {
                 // Green Wins
                 Log.d("winner", "Green Wins!");
                 gameOver = true;
-                winner = "Green";
+                winner = "Green Wins!";
+                winColor = players[1].color;
                 bubbles.clear();
+                return;
             }
 
             spawnTimer += delta;
@@ -139,6 +142,14 @@ public class GameplayView extends View {
                 }
             }
         }
+        else
+        {
+            Activity host = (Activity) this.getContext();
+            Intent intent = new Intent(host, WinActivity.class);
+            intent.putExtra("EXTRA_WINNER", winner);
+            intent.putExtra("EXTRA_COLOR", winColor);
+            host.startActivity(intent);
+        }
     }
 
     @Override
@@ -147,13 +158,23 @@ public class GameplayView extends View {
             init();
         }
 
-        long time = System.nanoTime();
-        double delta = (time - lastTime) / ONE_BILLION_LOL;
-        delta = Math.min(delta, MAX_DELTA);
-        lastTime = time;
-        gameUpdate(delta);
-        gameDraw(canvas);
-
+        if(gameOver) {
+            // TODO: Draw winner here instead of bubbles
+            long time = System.nanoTime();
+            double delta = (time - lastTime) / ONE_BILLION_LOL;
+            delta = Math.min(delta, MAX_DELTA);
+            lastTime = time;
+            gameUpdate(delta);
+            gameDraw(canvas);
+        }
+        else {
+            long time = System.nanoTime();
+            double delta = (time - lastTime) / ONE_BILLION_LOL;
+            delta = Math.min(delta, MAX_DELTA);
+            lastTime = time;
+            gameUpdate(delta);
+            gameDraw(canvas);
+        }
 
         invalidate();
         super.onDraw(canvas);
@@ -163,9 +184,9 @@ public class GameplayView extends View {
         if(!gameOver)
         {
             bubbles.render(canvas, paint);
+            hud.render(canvas, paint);
         }
 
-        hud.render(canvas, paint);
         invalidate();
     }
 
@@ -196,7 +217,7 @@ public class GameplayView extends View {
 
     String getIP() {
         // TODO: Put IP in settings
-        return "10.98.123.119";
+        return "192.168.0.25";
     }
 
     String getLightJSON(int scoreDifference) {
