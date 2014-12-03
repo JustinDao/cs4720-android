@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import edu.virginia.cs.tugowar.game.GameUtils;
 import edu.virginia.cs.tugowar.game.GameplayView;
@@ -19,6 +20,7 @@ public class GameActivity extends Activity {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
         GameUtils.DPI = metrics.xdpi;
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new GameplayView(this));
     }
 
