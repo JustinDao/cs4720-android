@@ -3,9 +3,11 @@ package edu.virginia.cs.tugowar.game;
 import android.content.Context;
 import android.content.Intent;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,8 +44,6 @@ public class GameplayView extends View {
     final Paint paint = new Paint();
     final EntitySet bubbles = new EntitySet();
     final EntitySet hud = new EntitySet();
-
-    private Text winnerText;
 
     // ok ok this is kind of ugly. w/e
     Player[] players = new Player[] {
@@ -159,7 +159,6 @@ public class GameplayView extends View {
         }
 
         if(gameOver) {
-            // TODO: Draw winner here instead of bubbles
             long time = System.nanoTime();
             double delta = (time - lastTime) / ONE_BILLION_LOL;
             delta = Math.min(delta, MAX_DELTA);
@@ -216,8 +215,9 @@ public class GameplayView extends View {
     }
 
     String getIP() {
-        // TODO: Put IP in settings
-        return "192.168.0.25";
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        String ip = preferences.getString("RPi_IP_Address", "0.0.0.0");
+        return ip;
     }
 
     String getLightJSON(int scoreDifference) {

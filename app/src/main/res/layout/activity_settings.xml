@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="aljudy.cs4720_android.SettingsActivity">
+
+    <TextView android:text="IP Address:" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ipText"
+        android:textSize="50dp"
+        android:layout_marginTop="161dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:id="@+id/ipEdit"
+        android:layout_below="@+id/ipText"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:text="Apply"
+        android:id="@+id/applyIP"
+        android:textSize="40dp"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/rpiButton"
+        android:layout_alignStart="@+id/rpiButton" />
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:text="Test RPi Service"
+        android:id="@+id/rpiButton"
+        android:textSize="30dp"
+        android:layout_below="@+id/applyIP"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="107dp" />
+
+</RelativeLayout>

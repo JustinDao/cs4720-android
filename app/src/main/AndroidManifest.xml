@@ -47,6 +47,10 @@
             android:name="aljudy.cs4720_android.WinActivity"
             android:label="@string/title_activity_win" >
         </activity>
+        <activity
+            android:name="aljudy.cs4720_android.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

@@ -16,11 +16,11 @@ public class MainMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        Button startButton = (Button) findViewById(R.id.startButton);
-        startButton.setOnClickListener(new View.OnClickListener() {
+        Button settingsButton = (Button) findViewById(R.id.settingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startMain();
+                startSettings();
             }
         });
 
@@ -58,8 +58,8 @@ public class MainMenuActivity extends Activity {
 
     }
 
-    void startMain() {
-        Intent i = new Intent(getApplicationContext(), RPiActivity.class);
+    void startSettings() {
+        Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
         startActivity(i);
     }
 
@@ -86,7 +86,7 @@ public class MainMenuActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main_menu, menu);
+//        getMenuInflater().inflate(R.menu.menu_main_menu, menu);
         return true;
     }
 

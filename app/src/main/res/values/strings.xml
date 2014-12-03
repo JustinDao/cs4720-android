@@ -20,5 +20,6 @@
     <string name="instructions5">TWO PLAYERS</string>
     <string name="instructions6">Each player should tap their color bubble as fast as they can while avoiding their opponent’s bubbles. Be fast. Be furious. Reduce your enemy to smoldering ash.</string>
     <string name="title_activity_win">WinActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
 </resources>
