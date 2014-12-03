@@ -27,7 +27,8 @@
         </activity>
         <activity
             android:name="aljudy.cs4720_android.MicrophoneActivity"
-            android:label="@string/title_activity_microphone" >
+            android:label="@string/title_activity_microphone"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="aljudy.cs4720_android.GameActivity"
@@ -36,20 +37,23 @@
         </activity>
         <activity
             android:name="aljudy.cs4720_android.TwitterActivity"
-            android:label="@string/title_activity_twitter" >
+            android:label="@string/title_activity_twitter"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="aljudy.cs4720_android.InstructionsActivity"
             android:label="@string/title_activity_instructions"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="aljudy.cs4720_android.WinActivity"
-            android:label="@string/title_activity_win" >
+            android:label="@string/title_activity_win"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="aljudy.cs4720_android.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

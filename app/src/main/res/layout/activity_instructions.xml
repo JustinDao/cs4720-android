@@ -13,7 +13,8 @@
         android:text="@string/instructions1"
         android:id="@+id/instructionText1"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textSize="45dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,37 +23,8 @@
         android:text="@string/instructions2"
         android:id="@+id/instructionText2"
         android:layout_below="@+id/instructionText1"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/instructions3"
-        android:id="@+id/instructionText3"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/instructions4"
-        android:id="@+id/instructionText4"
-        android:layout_below="@+id/instructionText3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/instructions5"
-        android:id="@+id/instructionText5"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/instructionText1"
-        android:layout_toEndOf="@+id/instructionText1" />
+        android:layout_centerHorizontal="true"
+        android:textSize="30dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -60,8 +32,24 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/instructions6"
         android:id="@+id/instructionText6"
-        android:layout_below="@+id/instructionText5"
-        android:layout_alignLeft="@+id/instructionText5"
-        android:layout_alignStart="@+id/instructionText5" />
+        android:textSize="30dp"
+        android:textColor="#FFFFFF"
+        android:layout_below="@+id/instructionText3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/instructions3"
+        android:id="@+id/instructionText3"
+        android:textSize="30dp"
+        android:textColor="#FFFFFF"
+        android:layout_below="@+id/instructionText2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
 
 </RelativeLayout>

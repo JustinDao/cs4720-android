@@ -24,27 +24,11 @@ public class MainMenuActivity extends Activity {
             }
         });
 
-        Button micButton = (Button) findViewById(R.id.micButton);
-        micButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startMicActivity();
-            }
-        });
-
         Button gameButton = (Button) findViewById(R.id.gameButton);
         gameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startGame();
-            }
-        });
-
-        Button twitterButton = (Button) findViewById(R.id.twitterButton);
-        twitterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startTwitter();
             }
         });
 
@@ -63,18 +47,8 @@ public class MainMenuActivity extends Activity {
         startActivity(i);
     }
 
-    void startMicActivity() {
-        Intent i = new Intent(getApplicationContext(), MicrophoneActivity.class);
-        startActivity(i);
-    }
-
     void startGame() {
         Intent i = new Intent(getApplicationContext(), GameActivity.class);
-        startActivity(i);
-    }
-
-    void startTwitter() {
-        Intent i = new Intent(getApplicationContext(), TwitterActivity.class);
         startActivity(i);
     }
 

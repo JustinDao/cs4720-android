@@ -15,7 +15,7 @@
     <string name="title_activity_instructions">InstructionsActivity</string>
     <string name="instructions1">HOW TO PLAY</string>
     <string name="instructions2">Each time your color bubble pops up on the screen, tap it as fast as you can. A point will be earned each time a bubble is tapped. Be sure to tap your own bubbles, or else you will be giving your opponent a point! Keep tapping until all the lights on the light strip change to your color or you crack your screen, whichever comes first.</string>
-    <string name="instructions3">ONE PLAYER</string>
+    <string name="instructions3">If you see a square that is your color, SHOUT for some extra points.</string>
     <string name="instructions4">Play against the machine! Choose your difficulty level and consequently, your destiny.</string>
     <string name="instructions5">TWO PLAYERS</string>
     <string name="instructions6">Each player should tap their color bubble as fast as they can while avoiding their opponent’s bubbles. Be fast. Be furious. Reduce your enemy to smoldering ash.</string>
