@@ -22,6 +22,7 @@ public class GameActivity extends Activity {
     private MediaRecorder mic = null;
 
     private void initMic() {
+        if (mic != null) return;
         mic = new MediaRecorder();
         mic.setAudioSource(MediaRecorder.AudioSource.MIC);
         mic.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -33,6 +34,7 @@ public class GameActivity extends Activity {
         } catch (IOException e) {
             mic = null;
             Log.e("GameActivity", "IOException booting up mic!");
+            System.exit(0);
         }
     }
 
@@ -56,10 +58,12 @@ public class GameActivity extends Activity {
         initMic();
     }
 
-    public double getMicPercent() {
+    public int getMicAmp() {
         if (mic != null) {
-            return (double)mic.getMaxAmplitude() / (double)MIC_MAX_AMPLITUDE;
-        } else return 0;
+            return mic.getMaxAmplitude(); // / (double)MIC_MAX_AMPLITUDE;
+        } else {
+            return 0;
+        }
     }
 
     @Override

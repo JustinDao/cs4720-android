@@ -52,6 +52,7 @@ public class SettingsActivity extends Activity {
         editor.putString("RPi_IP_Address", ip); // value to store
         editor.commit();
         Log.d("commit", preferences.getString("RPi_IP_Address", "fail"));
+        ((TextView) findViewById(R.id.ipText)).setText(ip);
     }
 
     public void startRPi() {

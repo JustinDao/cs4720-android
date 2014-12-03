@@ -27,6 +27,10 @@ import aljudy.cs4720_android.WinActivity;
  */
 public class GameplayView extends View {
 
+    static final double SHOUT_DURATION = 1.0;
+    static final double SHOUT_TIME_MIN = 2.0;
+    static final double SHOUT_TIME_MAX = 5.0;
+    static final int SHOUT_THRESHOLD = 18*1000;
     static final int WIN_SCORE_DIFFERENCE = 16;
     static final double ONE_BILLION_LOL = 1000000000.0;
     static final int MAX_PLAYER_BUBBLES = 5;
@@ -57,9 +61,13 @@ public class GameplayView extends View {
         players[0]
     };
     boolean flip = false;
+    boolean seriouslyDone = false;
 
-    private long lastTime;
-    private double spawnTimer = 0;
+    long lastTime;
+    double spawnTimer = 0;
+    double shoutCooldown = 0;
+
+    ShoutBubble shout = null;
 
     public GameplayView(GameActivity context) {
         super(context);
@@ -81,10 +89,11 @@ public class GameplayView extends View {
             i++;
         }
         initialized = true;
+        resetShoutTime();
     }
 
     private void makeOneBubble(Player p) {
-        double r = GameUtils.DPI;
+        double r = GameUtils.DPI * 0.8;
         double rx = GameUtils.randomDouble(r, getWidth()-r);
         double ry = GameUtils.randomDouble(r, getHeight()-r);
         double duration = 0.75;
@@ -99,10 +108,43 @@ public class GameplayView extends View {
         flip = !flip;
     }
 
+    private void resetShoutTime() {
+        shoutCooldown = GameUtils.randomDouble(SHOUT_TIME_MIN, SHOUT_TIME_MAX);
+    }
+
+    private void makeShout() {
+        double r = inch*1.2f;
+        double rx = GameUtils.randomDouble(r, getWidth()-r);
+        double ry = GameUtils.randomDouble(r, getHeight()-r);
+        int pid = GameUtils.randomInt(0, 1);
+        shout = new ShoutBubble(
+            players[pid],
+            rx, ry, r, SHOUT_DURATION
+        );
+        // if (pid == 1) shout.transform.preRotate(180);
+    }
+
     private void gameUpdate(double delta) {
         if (!gameOver)
         {
-
+            int amp = activity.getMicAmp();
+            if (shout != null) {
+                shout.update(delta);
+                if (amp >= SHOUT_THRESHOLD) {
+                    shout.destroy();
+                    shout.player.score += 2;
+                }
+                if (shout.isDestroyed()) {
+                    shout = null;
+                    resetShoutTime();
+                }
+            } else {
+                shoutCooldown -= delta;
+                if (shoutCooldown <= 0) {
+                    makeShout();
+                }
+            }
+            // Log.d("GameplayView", "" + activity.getMicPercent());
             int scoreDifference = players[0].score - players[1].score;
 
             if (oldScoreDifference != scoreDifference)
@@ -147,6 +189,9 @@ public class GameplayView extends View {
         }
         else
         {
+            if (seriouslyDone) return;
+            seriouslyDone = true; // dammit
+            // Log.e("GameplayView", "SWITCHING SCREEN!");
             Intent intent = new Intent(activity, WinActivity.class);
             intent.putExtra("EXTRA_WINNER", winner);
             intent.putExtra("EXTRA_COLOR", winColor);
@@ -186,9 +231,10 @@ public class GameplayView extends View {
         {
             bubbles.render(canvas, paint);
             hud.render(canvas, paint);
+            if (shout != null) shout.render(canvas, paint);
+            invalidate();
         }
 
-        invalidate();
     }
 
     @Override
