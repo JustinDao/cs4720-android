@@ -19,6 +19,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 
+import aljudy.cs4720_android.GameActivity;
 import aljudy.cs4720_android.WinActivity;
 
 /**
@@ -44,6 +45,7 @@ public class GameplayView extends View {
     final Paint paint = new Paint();
     final EntitySet bubbles = new EntitySet();
     final EntitySet hud = new EntitySet();
+    final GameActivity activity;
 
     // ok ok this is kind of ugly. w/e
     Player[] players = new Player[] {
@@ -59,8 +61,9 @@ public class GameplayView extends View {
     private long lastTime;
     private double spawnTimer = 0;
 
-    public GameplayView(Context context) {
+    public GameplayView(GameActivity context) {
         super(context);
+        activity = context;
     }
 
     private void init() {
@@ -144,11 +147,10 @@ public class GameplayView extends View {
         }
         else
         {
-            Activity host = (Activity) this.getContext();
-            Intent intent = new Intent(host, WinActivity.class);
+            Intent intent = new Intent(activity, WinActivity.class);
             intent.putExtra("EXTRA_WINNER", winner);
             intent.putExtra("EXTRA_COLOR", winColor);
-            host.startActivity(intent);
+            activity.startActivity(intent);
         }
     }
 
